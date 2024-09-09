@@ -4,7 +4,9 @@
   "description": "\"API for evident market app\"",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"webpack --mode development --watch\" \"nodemon ./dist/index.js\""
+    "build:dev": "webpack --mode development --watch",
+    "server": "nodemon ./dist/index.js",
+    "dev": "concurrently 'npm run build:dev' 'npm run server'"
   },
   "keywords": [
     "gql",
@@ -18,13 +20,13 @@
     "@types/node": "22.5.4",
     "@types/webpack": "5.28.5",
     "concurrently": "9.0.0",
-    "nodemon": "^3.1.4",
+    "nodemon": "3.1.4",
     "ts-node": "10.9.2",
     "typescript": "5.5.4",
     "webpack-cli": "5.1.4"
   },
   "dependencies": {
-    "@apollo/server": "^4.11.0",
-    "graphql": "^16.9.0"
+    "@apollo/server": "4.11.0",
+    "graphql": "16.9.0"
   }
 }
