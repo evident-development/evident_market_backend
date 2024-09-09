@@ -18,7 +18,7 @@ const books = [
   },
   {
     title: "City of Glass",
-    author: "Paul Austerssssss",
+    author: "Paul Auste",
   },
 ];
 
