@@ -6,7 +6,11 @@ const typeDefs = `
     title: String
     author: String
   }
+  type Query {
+    books: [Book]
+  }
 `;
+
 const books = [
   {
     title: "The Awakening",
@@ -14,7 +18,7 @@ const books = [
   },
   {
     title: "City of Glass",
-    author: "Paul Auster",
+    author: "Paul Auste",
   },
 ];
 
