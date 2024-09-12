@@ -1,30 +1,41 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
+import fs from "fs";
+import path from "path";
 
-const typeDefs = `
-  type Book {
-    title: String
-    author: String
-  }
-  type Query {
-    books: [Book]
-  }
-`;
+const typeDefs = fs.readFileSync(path.resolve("src", "schema.gql"), "utf-8");
 
-const books = [
+interface IGoods {
+  id: string;
+  description: string;
+  price: number;
+  count?: number | null;
+}
+const goods = [
   {
-    title: "The Awakening",
-    author: "Kate Chopin",
-  },
-  {
-    title: "City of Glass",
-    author: "Paul Auste",
+    id: "test-1",
+    description: "Some description - 1",
+    price: 500,
+    count: 10,
   },
 ];
 
 const resolvers = {
   Query: {
-    books: () => books,
+    product: () => goods,
+  },
+  Mutation: {
+    add(_, args: IGoods) {
+      const newGood = {
+        id: Math.random().toString(),
+        description: args.description,
+        price: 400,
+        count: 39,
+      };
+      goods.push(newGood);
+
+      return newGood;
+    },
   },
 };
 

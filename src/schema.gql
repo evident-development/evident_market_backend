@@ -1,0 +1,15 @@
+type Query {
+  info: String!
+  product: [Good!]!
+}
+
+type Good {
+  id: ID!
+  description: String!
+  price: Int!
+  count: Int
+}
+
+type Mutation {
+  add(description: String!, price: Int!, count: Int): Good!
+}
