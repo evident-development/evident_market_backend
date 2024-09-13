@@ -1,6 +1,14 @@
 type Query {
   info: String!
   product: [Good!]!
+  users: [users!]!
+}
+
+type users {
+  id: ID!
+  name: String!
+  email: String!
+  password: String!
 }
 
 type Good {
@@ -11,5 +19,5 @@ type Good {
 }
 
 type Mutation {
-  add(description: String!, price: Int!, count: Int): Good!
+  add(description: String!, price: Int!, count: Int!): Good!
 }
