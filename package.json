@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "description": "\"API for evident market app\"",
   "main": "index.js",
-  "type": "module",
   "scripts": {
-    "compile": "tsc --watch",
+    "compile": "webpack --mode development --watch",
     "server": "nodemon ./dist/index.js",
-    "start": "concurrently 'npm run compile' 'npm run server'"
+    "dev": "concurrently \"npm run server\" \"npm run compile\""
   },
   "keywords": [
     "gql",
@@ -20,13 +19,22 @@
   "devDependencies": {
     "@types/node": "22.5.4",
     "@types/webpack": "5.28.5",
-    "@types/webpack-node-externals": "^3.0.4",
-    "concurrently": "9.0.0",
-    "nodemon": "3.1.4",
-    "typescript": "5.5.4"
+    "@types/webpack-node-externals": "3.0.4",
+    "clean-webpack-plugin": "4.0.0",
+    "concurrently": "^9.0.1",
+    "nodemon": "^3.1.4",
+    "prisma": "5.19.1",
+    "ts-loader": "9.5.1",
+    "ts-node": "10.9.2",
+    "typescript": "5.6.2",
+    "webpack-cli": "5.1.4",
+    "webpack-node-externals": "3.0.0"
   },
   "dependencies": {
     "@apollo/server": "4.11.0",
-    "graphql": "16.9.0"
+    "@prisma/client": "^5.19.1",
+    "graphql": "16.9.0",
+    "graphql-tag": "2.12.6",
+    "graphql-tools": "9.0.1"
   }
 }

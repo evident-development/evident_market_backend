@@ -1,0 +1,6 @@
+type Query {
+  findUserById(userId: ID!): User!
+}
+type Mutation {
+  saveUser(name: String!, email: String!, password: String!): User!
+}
