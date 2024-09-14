@@ -1,47 +1,45 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
-import fs from "fs";
-import path from "path";
+import { makeExecutableSchema } from "graphql-tools";
+import { getTypeDefs } from "./utils/getTypeDefs";
 import { PrismaClient } from "@prisma/client";
-
-const typeDefs = fs.readFileSync(path.resolve("src", "schema.gql"), "utf-8");
+import { IUser } from "./types";
 
 const prisma = new PrismaClient();
-interface IGoods {
-  id: string;
-  description: string;
-  price: number;
-  count?: number | null;
-}
 
 const resolvers = {
   Query: {
-    product: async () => await prisma.good.findMany(),
-    users: async () => await prisma.users.findMany(),
+    findUserById: async (_, args: { userId: string }) => {
+      return await prisma.user.findUnique({
+        where: {
+          id: args.userId,
+        },
+      });
+    },
   },
-
   Mutation: {
-    async add(_, args: IGoods) {
-      const newGood = {
-        description: args.description,
-        price: args.price,
-        count: args.count,
-      };
-      await prisma.good
-        .create({ data: newGood })
-        .then(() => newGood)
-        .catch((err) => console.log("Hello my angel", err));
+    saveUser: async (_, args: IUser) => {
+      try {
+        const { name, email, password } = args;
+        const newUser = { name, email, password };
+        return await prisma.user.create({ data: newUser });
+      } catch (err) {
+        return err.message;
+      }
     },
   },
 };
 
+const typeDefs = getTypeDefs("schema.graphql", "auth.graphql");
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema: makeExecutableSchema({
+    typeDefs,
+    resolvers,
+  }),
 });
 
 const { url } = await startStandaloneServer(server, {
   listen: { port: 4000 },
 });
 
-console.log(`🚀Server ready at: ${url}`);
+console.log(`🚀 Server ready at: ${url}`);
