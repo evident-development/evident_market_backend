@@ -3,35 +3,28 @@ import { startStandaloneServer } from "@apollo/server/standalone";
 import { makeExecutableSchema } from "graphql-tools";
 import { getTypeDefs } from "./utils/getTypeDefs";
 import { PrismaClient } from "@prisma/client";
-import { IUser } from "./types";
+import { IContext } from "./types";
+import { findUserById, products } from "./resolvers";
+import { signup, signin } from "./resolvers";
+import { postedBy } from "./resolvers/Product";
 
 const prisma = new PrismaClient();
 
 const resolvers = {
   Query: {
-    findUserById: async (_, args: { userId: string }) => {
-      return await prisma.user.findUnique({
-        where: {
-          id: args.userId,
-        },
-      });
-    },
+    findUserById,
   },
   Mutation: {
-    saveUser: async (_, args: IUser) => {
-      try {
-        const { name, email, password } = args;
-        const newUser = { name, email, password };
-        return await prisma.user.create({ data: newUser });
-      } catch (err) {
-        return err.message;
-      }
-    },
+    signup,
+    signin,
+    postedBy,
+    products,
   },
 };
 
 const typeDefs = getTypeDefs("schema.graphql", "auth.graphql");
-const server = new ApolloServer({
+
+const server = new ApolloServer<IContext>({
   schema: makeExecutableSchema({
     typeDefs,
     resolvers,
@@ -39,6 +32,9 @@ const server = new ApolloServer({
 });
 
 const { url } = await startStandaloneServer(server, {
+  context: async ({ req, res }) => ({
+    prisma,
+  }),
   listen: { port: 4000 },
 });
 
